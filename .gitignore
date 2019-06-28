@@ -1,8 +1,8 @@
 .idea
 Config.rsc
 
-# Files generated for Rascal resources
-src/*.rsc
+# generated results files
+results/*
 
 # eclipse stuff
 .metadata
