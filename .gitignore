@@ -4,6 +4,9 @@ Config.rsc
 # generated results files
 results/*
 
+# c++ stuff
+*.out
+
 # eclipse stuff
 .metadata
 bin/**

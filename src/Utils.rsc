@@ -1,4 +1,3 @@
-// various utility functions for testing AST generation
 module Utils
 
 import lang::cpp::AST;
@@ -7,7 +6,7 @@ import IO;
 import String;
 
 public rel[loc, Declaration] examplesToASTs()
-	= { <l, parseCpp(l)> | l <- |project://cpp-t/test|.ls };
+	= { <l, parseCpp(l)> | l <- |project://cpp-t/test|.ls, endsWith(l.file, ".cpp")};
 	
 public void astsToFiles(rel[loc, Declaration] asts = examplesToASTs()){
 	for(<l, ast> <- asts){
