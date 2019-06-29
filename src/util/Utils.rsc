@@ -7,11 +7,11 @@ import util::Config;
 import IO;
 import String;
 
-public rel[loc, Declaration] examplesToASTs()
-	= { <l, parseCpp(l)> | l <- testFilesLoc.ls, endsWith(l.file, ".cpp")};
+public set[Declaration] examplesToASTs()
+	= { parseCpp(l) | l <- testFilesLoc.ls, endsWith(l.file, ".cpp")};
 	
-public void astsToFiles(rel[loc, Declaration] asts = examplesToASTs()){
-	for(<l, ast> <- asts){
-		iprintToFile(resultFilesLoc + "/ast/" + replaceFirst(l.file, ".cpp", ".ast"), ast);
+public void astsToFiles(set[Declaration] asts = examplesToASTs()){
+	for(ast <- asts){
+		iprintToFile(resultFilesLoc + "/ast/" + replaceFirst(ast.src.file, ".cpp", ".ast"), ast);
 	}
 }

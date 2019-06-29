@@ -115,4 +115,4 @@ private str ppExpr(str op, Expression expr) = "<op><pp(epxpr)>";
 private str ppExpr(Expression expr, str op) = "<pp(expr)><op>";
 
 
-public default str pp(node n) { "Pretty printing logic for node <n> is not yet supported!"; }
+public default str pp(node n) = "Pretty printing logic for node <n> is not yet supported!";
