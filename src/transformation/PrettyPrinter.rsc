@@ -2,6 +2,31 @@ module transformation::PrettyPrinter
 
 import lang::cpp::AST;
 
+import List;
+
+// Declaration pretty printing logic
+public str pp(translationUnit(declarations)) = intercalate("\n", [pp(d) | d <- declarations]);
+public str pp(simpleDeclaration(declSpecifier, declarators)) = "<pp(declSpecifier)> <intercalate(", ", [pp(d) | d <- declarators])>";
+public str pp(usingDirective(name)) = "using namespace <pp(name)>;";
+public str pp(functionDefinition(declSpecifier, declarator, memberInitializer, body)) 
+	= "<pp(declSpecifier)><pp(declarator)>(<intercalate("", [pp(m) | m <- memberInitializer])>)<pp(body)>";
+
+// Declaration Specifier pretty printing logic
+public str pp(declSpecifier(modifiers, \type)) = intercalate(" ", [pp(m) | m <- modifiers]) + " <pp(\type)>";
+
+// Declarator pretty printing logic
+public str pp(functionDeclarator(pointerOperators, modifiers, name, parameters, virtSpecifiers))
+	= "<intercalate("", [pp(p) | p <- pointerOperators])> <intercalate(" ", [pp(m) | m <- modifiers])> <pp(name)>";
+public str pp(declarator(pointerOperators, name, initializer)) = "<intercalate("", [pp(p) | p <- pointerOperators])><pp(name)><pp(initializer)>";
+
+// Name pretty printing logic
+public str pp(name(name)) = name;
+
+// Statement pretty printing logic
+public str pp(compoundStatement(statements)) = "{\n<intercalate("\n", [pp(s) | s <- statements])>\n}";
+public str pp(declarationStatement(decl)) = "<pp(decl)>;";
+public str pp(expressionStatement(expr)) = "<pp(expr)>;";
+
 // binary operator expression pretty printing logic
 public str pp(multiply(lhs, rhs)) = ppExpr(lhs, rhs, "*");
 public str pp(divide(lhs, rhs)) = ppExpr(lhs, rhs, "/");
@@ -53,6 +78,17 @@ public str pp(alignof(expr)) = "alignof(<pp(expr)>)";
 public str pp(sizeofParameterPack(expr)) = "sizeof...(<pp(expr)>)";
 public str pp(noexcept(expr)) = "noexcept(<pp(expr)>)";
 public str pp(labelReference(expr)) = "&&<pp(expr)>";
+
+// initializer expression pretty printing
+public str pp(equalsIntializer(expr)) = "= <pp(expr)>";
+public str pp(initializerList(exprs)) = "{<intercalate(", ", [pp(e) | e <- exprs])>}";
+
+// constant expression pretty printing
+
+// expression pretty printing helpers
+private str ppExpr(Expression lhs, Expression rhs, str op) = "<pp(lhs)> <op> <pp(rhs)>";
+private str ppExpr(str op, Expression expr) = "<op><pp(expr)>";
+private str ppExpr(Expression expr, str op) = "<pp(expr)><op>";
 
 // pretty printing for types
 public str pp(unspecified()) = ""; // what should this print?
@@ -108,11 +144,6 @@ public str pp(typename()) = "typename";
 public str pp(captDefUnspecified()) = ""; // TODO
 public str pp(capDefByCopy()) = ""; // TODO
 public str pp(captDefByReference()) = ""; // TODO
-
-// expression pretty printing helpers
-private str ppExpr(Expression lhs, Expression rhs, str op) = "<pp(lhs)> <op> <pp(rhs)>";
-private str ppExpr(str op, Expression expr) = "<op><pp(epxpr)>";
-private str ppExpr(Expression expr, str op) = "<pp(expr)><op>";
 
 
 public default str pp(node n) = "Pretty printing logic for node <n> is not yet supported!";
