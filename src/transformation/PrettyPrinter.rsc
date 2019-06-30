@@ -27,7 +27,7 @@ public str pp(name(name)) = name;
 public str pp(compoundStatement(statements)) = "{\n<intercalate("\n", [pp(s) | s <- statements])>\n}";
 public str pp(declarationStatement(decl)) = "<pp(decl)>;";
 public str pp(expressionStatement(expr)) = "<pp(expr)>;";
-public str pp(\return(expr)) = "return <pp(expr)>";
+public str pp(\return(expr)) = "return <pp(expr)>;";
 
 // binary operator expression pretty printing logic
 public str pp(multiply(lhs, rhs)) = ppExpr(lhs, rhs, "*");
