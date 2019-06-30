@@ -19,10 +19,8 @@ public Declaration transform(Declaration ast){
 
 public set[Declaration] transformExamples() = mapper(examplesToASTs(), transform);
 
-public void generateCpp(Declaration ast) = writeFile(resultFilesLoc + "/cpp/" + ast.src.file, pp(transform(ast)));
-
 public void outputTransformations(){
 	for(ast <- transformExamples()){
-		generateCpp(ast);
+		generateCpp(transform(ast), location = resultFilesLoc + "/transform/" + ast.src.file);
 	}
 }

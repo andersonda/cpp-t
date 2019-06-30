@@ -3,6 +3,7 @@ module util::Utils
 import lang::cpp::AST;
 
 import util::Config;
+import transformation::PrettyPrinter;
 
 import IO;
 import String;
@@ -15,3 +16,5 @@ public void astsToFiles(set[Declaration] asts = examplesToASTs()){
 		iprintToFile(resultFilesLoc + "/ast/" + replaceFirst(ast.src.file, ".cpp", ".ast"), ast);
 	}
 }
+
+public void generateCpp(Declaration ast, loc location = resultFilesLoc + "/cpp/" + ast.src.file) = writeFile(location, pp(ast));
