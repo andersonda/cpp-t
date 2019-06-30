@@ -13,6 +13,7 @@ public str pp(functionDefinition(declSpecifier, declarator, memberInitializer, b
 
 // Declaration Specifier pretty printing logic
 public str pp(declSpecifier(modifiers, \type)) = intercalate(" ", [pp(m) | m <- modifiers]) + " <pp(\type)>";
+public str pp(namedTypeSpecifier(modifiers, name)) = "<intercalate("", [pp(m) | m <- modifiers])> <pp(name)>";
 
 // Declarator pretty printing logic
 public str pp(functionDeclarator(pointerOperators, modifiers, name, parameters, virtSpecifiers))
@@ -26,6 +27,7 @@ public str pp(name(name)) = name;
 public str pp(compoundStatement(statements)) = "{\n<intercalate("\n", [pp(s) | s <- statements])>\n}";
 public str pp(declarationStatement(decl)) = "<pp(decl)>;";
 public str pp(expressionStatement(expr)) = "<pp(expr)>;";
+public str pp(\return(expr)) = "return <pp(expr)>";
 
 // binary operator expression pretty printing logic
 public str pp(multiply(lhs, rhs)) = ppExpr(lhs, rhs, "*");
@@ -92,6 +94,11 @@ public str pp(this()) = "this";
 public str pp(\true()) = "true";
 public str pp(\false()) = "false";
 public str pp(nullptr()) = "nullptr";
+
+public str pp(idExpression(name)) = pp(name);
+public str pp(integerLiteral(number)) = "<number>";
+public str pp(conditional(condition, positive, negative)) = "<pp(condition)> ? <pp(positive)> : <pp(negative)>";
+
 
 // expression pretty printing helpers
 private str ppExpr(Expression lhs, Expression rhs, str op) = "<pp(lhs)> <op> <pp(rhs)>";
