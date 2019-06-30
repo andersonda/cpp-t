@@ -17,7 +17,7 @@ public str pp(declSpecifier(modifiers, \type)) = intercalate(" ", [pp(m) | m <- 
 // Declarator pretty printing logic
 public str pp(functionDeclarator(pointerOperators, modifiers, name, parameters, virtSpecifiers))
 	= "<intercalate("", [pp(p) | p <- pointerOperators])> <intercalate(" ", [pp(m) | m <- modifiers])> <pp(name)>";
-public str pp(declarator(pointerOperators, name, initializer)) = "<intercalate("", [pp(p) | p <- pointerOperators])><pp(name)><pp(initializer)>";
+public str pp(declarator(pointerOperators, name, initializer)) = "<intercalate("", [pp(p) | p <- pointerOperators])><pp(name)> <pp(initializer)>";
 
 // Name pretty printing logic
 public str pp(name(name)) = name;
@@ -84,6 +84,14 @@ public str pp(equalsIntializer(expr)) = "= <pp(expr)>";
 public str pp(initializerList(exprs)) = "{<intercalate(", ", [pp(e) | e <- exprs])>}";
 
 // constant expression pretty printing
+public str pp(integerConstant(i)) = i;
+public str pp(floatConstant(f)) = f;
+public str pp(charConstant(c)) = c;
+public str pp(stringLiteral(s)) = s;
+public str pp(this()) = "this";
+public str pp(\true()) = "true";
+public str pp(\false()) = "false";
+public str pp(nullptr()) = "nullptr";
 
 // expression pretty printing helpers
 private str ppExpr(Expression lhs, Expression rhs, str op) = "<pp(lhs)> <op> <pp(rhs)>";
