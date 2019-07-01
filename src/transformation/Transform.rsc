@@ -9,18 +9,26 @@ import transformation::PrettyPrinter;
 import IO;
 import Set;
 
-public Declarator toInitializerList(declarator([], name, equalsInitializer(expr))) = declarator([], name, initializerList([expr]));
+// public Declaration toInitializerList(declarator([], name, equalsInitializer(expr))) = declarator([], name, initializerList([expr]));
 
-public Declaration transform(Declaration ast){
+@doc{converts classic "<type> <identifier> = <expr>;" initializations to initializer list style "<type> <identifier> {<expr>};"}
+public Declaration toInitializerLists(Declaration ast){
 	return top-down visit(ast){
-		case d:declarator([], name, equalsInitializer(expr)) => toInitializerList(d)
+		case d:declarator([], name, equalsInitializer(expr)) => declarator([], name, initializerList([expr]))
 	}
 }
 
-public set[Declaration] transformExamples() = mapper(examplesToASTs(), transform);
+public Declaration transform(Declaration ast, Declaration (Declaration) transformations...){
+	for(t <- transformations){
+		ast = t(ast);
+	}
+	return ast;
+}
+
+public set[Declaration] transformExamples() = { transform(ast, toInitializerLists) | ast  <- examplesToASTs() };
 
 public void outputTransformations(){
 	for(ast <- transformExamples()){
-		generateCpp(transform(ast), location = resultFilesLoc + "/transform/" + ast.src.file);
+		generateCpp(ast, location = resultFilesLoc + "/transform/" + ast.src.file);
 	}
 }
