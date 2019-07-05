@@ -22,6 +22,7 @@ public str pp(functionDeclarator(pointerOperators, modifiers, name, parameters, 
 	= "<intercalate("", [pp(p) | p <- pointerOperators])> <intercalate(" ", [pp(m) | m <- modifiers])> <pp(name)> (<intercalate(", ", [pp(p) | p <- parameters])>)";
 public str pp(declarator(pointerOperators, name, initializer)) = "<intercalate("", [pp(p) | p <- pointerOperators])><pp(name)> <pp(initializer)>";
 public str pp(declarator(pointerOperators, name)) = "<intercalate("", [pp(p) | p <- pointerOperators])><pp(name)>";
+//public str pp(arrayDeclarator());
 
 // Name pretty printing logic
 public str pp(name(name)) = name;
@@ -104,6 +105,7 @@ public str pp(idExpression(name)) = pp(name);
 public str pp(integerLiteral(number)) = "<number>";
 public str pp(conditional(condition, positive, negative)) = "<pp(condition)> ? <pp(positive)> : <pp(negative)>";
 public str pp(functionCall(functionName, arguments)) = "<pp(functionName)>(<intercalate(", ", [pp(e) | e <- arguments])>)";
+public str pp(fieldReference(fieldOwner, name)) = "<pp(fieldOwner)>.<pp(name)>";
 
 
 // expression pretty printing helpers
