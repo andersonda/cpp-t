@@ -34,7 +34,21 @@ public Declaration toStdStrings(Declaration ast){
 				insert functionCall(fieldReference(n, name("at")), [expr]);
 			}
 		}
-		case functionCall(idExpression(name("strlen")), params) => functionCall(fieldReference(head(params), name("length")), [])
+		case functionCall(idExpression(name("strlen")), params): {
+			if(head(params).name.\value in arrays){
+				insert functionCall(fieldReference(head(params), name("length")), []);
+			}
+		}
+		case functionCall(idExpression(name("strcat")), params): {
+			if(head(params).name.\value in arrays){
+				insert plusAssign(params[0], params[1]);
+			}
+		}
+		case functionCall(idExpression(name("strcpy")), params): {
+			if(head(params).name.\value in arrays){
+				insert assign(params[0], params[1]); // TODO: does this actually work in all cases?
+			}
+		}
 	}
 }
 
